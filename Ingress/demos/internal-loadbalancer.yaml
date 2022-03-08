@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: demowebapi-svc
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  selector:
+    app: demowebapi
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
