@@ -7,7 +7,7 @@ In this demo you will deploy a web app that will use the API deployed in the pre
 1. Internal Azure Load Balancer for private deployments 
 1. Load Balancer Annotations
 
-  ![](.\content\d2image01.png)
+  ![imag1](content/d2image01.png)
 
 ### Task 1: Review Portal
 First lets review the default Azure Load Balancer created when you create an AKS Cluster. 
@@ -20,7 +20,7 @@ First lets review the default Azure Load Balancer created when you create an AKS
 
 >NOTE: The Azure LoadBalancer routes traffic to the Nodes (NodePort) in your cluster **not** the individual pods. The NodePort routes the traffic to the ClusterIP and the ClusterIP routes the traffic to a pod.
 
-  ![](content\d2image02.png)
+  ![image2](content/d2image02.png)
 
 ### Task 2: Setup 
 Create a deployment for the website consisting of 2 pods
@@ -83,7 +83,7 @@ webapp-svc   LoadBalancer   10.0.190.244   52.226.168.127  80:30161/TCP
 ### Task 4: Validate 
 In your browser navigate to the IP Address shown in **EXTERNAL-IP** column (*your IP Address will be different*)
 
-  ![](content\d2image03.png)
+  ![image3](content/d2image03.png)
 
 When the page displays it shows that traffic received on the public IP Address was routed to one of your **webapp** pods by the Azure Load Balancer.  The **webapp** pod sent traffic to the **demowebapi** ClusterIP service which then routed the traffic to one of the **demowebapi** pods and both pod names are displayed here.  Refresh the page and the names should eventually change showing the load balance nature of the services. 
 
@@ -93,7 +93,7 @@ Review changes made to the Azure Load Balancer
   1. Load Balancer -> Frontend IP Configuration and show the new **Public IP Address** added to the load balancer.  
   >NOTE: IP Address will match external IP Address on kubernetes Service
 
-  ![](content\d2image04.png)
+  ![image4](content/d2image04.png)
   
   3. Load Balancer -> Load Balancing Rules. Review rule added for **webapp-svc**
   1. Load Balancer -> Health Probe. Review health probe automatically created for **webapp-svc**
@@ -120,5 +120,5 @@ Review changes made to the Azure Load Balancer
   Use a browser and navigate to the PIP FQDN, in my case it will be `
 http://abc-mydomain.eastus.cloudapp.azure.com`.  You can find he FQDN in the portal by navigating to the Public IP Address Resource then Config
 
-  ![](content/d2image05.png)
+  ![image5](content/d2image05.png)
 
