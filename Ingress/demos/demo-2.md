@@ -59,7 +59,8 @@ Deploy the LoadBalancer service for the Web Application
 kubectl apply -f loadbalancer-service.yaml
 ```
 
-Monitor services and wait for the **EXTERNAL-IP** to get populated.  Press ***CTRL-C*** when IP Address is display
+Monitor services and wait for the **EXTERNAL-IP** to get populated.  Press ***CTRL-C*** when the EXTERNAL-IP Address is displayed
+
 ```bash
 kubectl get service/webapp-svc -w 
 ```
@@ -77,33 +78,34 @@ webapp-svc   LoadBalancer   10.0.190.244   52.226.168.127  80:30161/TCP
 >
 >When you create a LoadBalancer service in AKS, 
 >* Kubernetes will create the NodePort and ClusterIP abstractions. 
->* Next it will create a new Azure Public IP Address resource and assign it to the Azure Load Balancer.
->* Finally it configures the Azure Load Balancer to route traffic received on the new IP Address and Port to a node in the AKS Cluster. 
+>* Next, it will create a new Azure Public IP (PIP) Address resource and assign it to the Azure Load Balancer.
+>* Finally, it configures the Azure Load Balancer to route traffic received on the new IP Address and Port to a node in the AKS Cluster. 
 
 ### Task 4: Validate 
 In your browser navigate to the IP Address shown in **EXTERNAL-IP** column (*your IP Address will be different*)
 
   ![image3](content/d2image03.png)
 
-When the page displays it shows that traffic received on the public IP Address was routed to one of your **webapp** pods by the Azure Load Balancer.  The **webapp** pod sent traffic to the **demowebapi** ClusterIP service which then routed the traffic to one of the **demowebapi** pods and both pod names are displayed here.  Refresh the page and the names should eventually change showing the load balance nature of the services. 
+When the page displays, it shows that traffic received on the public IP Address was routed to one of your **webapp** pods by the Azure Load Balancer.  The **webapp** pod sent traffic to the **demowebapi** ClusterIP service which then routed the traffic to one of the **demowebapi** pods and both pod names are displayed here.  Refresh the page and the names should eventually change showing the services are routing traffic to different pods. 
 
-### Task 5: Review Azure Load Balancer 
+### Task 5: Review the Azure Load Balancer 
 Review changes made to the Azure Load Balancer 
   1. In the portal,  navigate to the **MC** namespace for your cluster (***mc_akstechbriefing_aks-briefing_eastus*** in my case) and select the Load Balancer named **kubernetes**
   1. Load Balancer -> Frontend IP Configuration and show the new **Public IP Address** added to the load balancer.  
-  >NOTE: IP Address will match external IP Address on kubernetes Service
+  >NOTE: The IP Address will match the external IP Address on the kubernetes Service
 
   ![image4](content/d2image04.png)
   
-  3. Load Balancer -> Load Balancing Rules. Review rule added for **webapp-svc**
-  1. Load Balancer -> Health Probe. Review health probe automatically created for **webapp-svc**
+  3. **Load Balancer -> Load Balancing Rules**. Review rule added for **webapp-svc**
+  1. **Load Balancer -> Health Probe**. Review health probe automatically created for **webapp-svc**
+  1. **Load Balancer -> Backend Pool**. 
 
 ### Task 6: Annotations 
-  Add a dns label annotation 
+  Add an annotation to configure a DNS label
 
   Modify the file `loadbalancer-service.yaml` and add the `service.beta.kubernetes.io/azure-dns-label-name` annotation
 
-  >NOTE: Replace `abc-mydomain` with a unique string to prevent duplicates
+  >NOTE: Replace ***abc-mydomain*** with a unique string to prevent duplicates
 
   ```yaml
   metadata:
@@ -118,7 +120,13 @@ Review changes made to the Azure Load Balancer
   ```
 
   Use a browser and navigate to the PIP FQDN, in my case it will be `
-http://abc-mydomain.eastus.cloudapp.azure.com`.  You can find he FQDN in the portal by navigating to the Public IP Address Resource then Config
+http://abc-mydomain.eastus.cloudapp.azure.com`.  You can find he FQDN in the portal by navigating to the Public IP Address (PIP) Resource then Config
 
   ![image5](content/d2image05.png)
 
+### Cleanup 
+
+Remove creates resources
+    ```bash
+    kubectl delete -f deployment-simpleapi.yaml -f deployment-webapp.yaml -f loadbalancer-service.yaml -f clusterip-service.yaml
+    ```

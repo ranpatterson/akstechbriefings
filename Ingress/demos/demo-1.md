@@ -23,13 +23,13 @@ demowebapi-588-q77j7   1/1     Running   0          4m7s   app=demowebapi,pod-te
 >NOTE:  Your template-hash label will be different
 
 ### Task 1 - Create a Service of type ClusterIP
-Now that we have 2 pods hosting the API we need a way to route traffic to those pods.  We'll create a ClusterIP Service to give us a single, discoveralbe endpointto route traffic to our pods.
+Now that we have 2 pods hosting the API we need a way to route traffic to those pods.  We'll create a ClusterIP Service to give us a single, discoverable endpoint to route traffic to our pods.
 
 ```bash
 cat clusterip-service.yaml
 ```
 
-![clusterIP yaml](./content/d1Image01.png)
+![clusterIP yaml](content/d1Image01.png)
 
 ```bash
 kubectl deploy -f clusterip-service.yaml
@@ -39,14 +39,14 @@ Show that the pods labels match the service selector
 ```bash
 kubectl get pod,svc --show-labels  -o wide
 ```
-![clusterIP yaml](./content/d1Image02.png)
+![clusterIP yaml](content/d1Image02.png)
 
 You can view the Endpoints with same name as the service to verify it found the correct pods 
 
 ```bash
 kubectl get pod,svc,ep -o wide
 ```
-![clusterIP yaml](./content/d1Image03.png)
+![clusterIP yaml](content/d1Image03.png)
 
 ### Task 3 - Scale deployment and verify endpoints 
 
@@ -62,7 +62,7 @@ Sample Output
 NAME                       ENDPOINTS                                 
 endpoints/demowebapi-svc   10.244.5.6:80,10.244.6.13:80,10.244.7.8:80
 ```
-For a complete picture of the service including endpoints, ports and event use the ```describe``` command 
+For a complete picture of the service including endpoints, ports and events use the ```describe``` command 
 
 ```bash
 kubectl describe svc/demowebapi-svc
@@ -117,13 +117,11 @@ demowebapi-588597b865-q77j7
 
 ### Cleanup 
 1. Exit from the jumpbox by typing:  ```exit```
-
-    output 
+    
+    >Sample Output
     ```
     /# exit
     Session ended, resume using 'kubectl attach jumpbox -c jumpbox -i -t' command when the pod is running
     pod "jumpbox" deleted
     ```
-1. delete the ClusterIP Service (keep the deployment for the next demo)
 
-    ```kubectl delete svc/demowebapi-svc```
